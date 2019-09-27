@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Highcharts from 'highcharts';
 import data from './data.json';
+import { Table } from 'antd';
 
 import HighchartsReact from 'highcharts-react-official';
 
@@ -157,41 +158,6 @@ const options =  {
 
 const opt = [
   {
-    "Channel": { "type": "string" },
-    "Date": { "type": "date string" },
-    "Media Source": { "type": "string" },
-    "ADS_FIVE_WATCHED": { "type": "number" },
-    "ADS_VIDEOAD_WATCHED": { "type": "number" },
-    "Add_Friend_Request": { "type": "number" },
-    "Click_Gifts": { "type": "number" },
-    "Click_Messages": { "type": "number" },
-    "CompleteGames": { "type": "number" },
-    "Complete_Send_Gifts": { "type": "number" },
-    "LAUNCH_REGISTRATION_COMPLETED": { "type": "number" },
-    "PRESTIGE_RESET_ACCEPTED": { "type": "number" },
-    "SCREEN_LEAGUE_COMPLETED": { "type": "number" },
-    "SHOP_PURCHASE_ADDED": { "type": "number" },
-    "SHOP_PURCHASE_UNFINISHED": { "type": "number" },
-    "Start_PK_Game": { "type": "number" },
-    "TUTORIAL_STEP_COMPLETED": { "type": "number" },
-    "UNIQUE_FIRST_PURCHASE": { "type": "number" },
-    "Visit_Other_Profile": { "type": "number" },
-    "add_friend": { "type": "number" },
-    "entergame": { "type": "number" },
-    "install": { "type": "number" },
-    "loginsuccess": { "type": "number" },
-    "stage_completed": { "type": "number" },
-    "ten_games": { "type": "number" },
-    "SHOP_PURCHASE_ADDED revenue, USD": { "type": "number" },
-    "UNIQUE_FIRST_PURCHASE revenue, USD": { "type": "number" },
-    "Campaign": { "type": "string" },
-    "Impressions": { "type": "number" },
-    "Clicks": { "type": "number" },
-    "Cost": { "type": "number" },
-    "Partner": { "type": "string" },
-    "Platform": { "type": "string" }
-  },
-  {
     "Channel": "Display Network",
     "Date": "2019-06-12T00:00:00.000Z",
     "Media Source": "googleadwords_int",
@@ -259,14 +225,49 @@ const opt = [
     "Clicks": 20.0,
     "Cost": 5.1302,
     "Partner": "SOCIARO",
-    "Platform": "Android"
+    "Platform": "Android",
   },
+];
+
+const columns = [
+    {
+        title: 'Campaign',
+        dataIndex: 'Campaign',
+        key: 'Campaign'
+    },
+    {
+        title: 'Channel',
+        dataIndex: 'Channel',
+        key: 'Channel'
+    },
+    {
+        title: 'Date',
+        dataIndex: 'Date',
+        key: 'Date'
+    },
+    {
+        title: 'Media Source',
+        dataIndex: 'Media Source',
+        key: 'Media Source'
+    },
+    {
+        title: 'ADS_FIVE_WATCHED',
+        dataIndex: 'ADS_FIVE_WATCHED',
+        key: 'ADS_FIVE_WATCHED'
+    },
+    {
+        title: 'ADS_VIDEOAD_WATCHED',
+        dataIndex: 'ADS_VIDEOAD_WATCHED',
+        key: 'ADS_VIDEOAD_WATCHED'
+    },
+    {
+        title: 'Add_Friend_Request',
+        dataIndex: 'Add_Friend_Request',
+        key: 'Add_Friend_Request'
+    },
 ]
 
-// const acc = opt.reduce((acc, current) => {
-//   return acc[current[""]]
-// }, {});
-// console.log('data', acc)
+
 
 
 function App() {
@@ -276,6 +277,8 @@ function App() {
         highcharts={Highcharts}
         options={options}
       />
+
+    <Table columns={columns} dataSource={data} onChange={() => {}} />
     </div>
   );
 }
