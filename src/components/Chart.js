@@ -1,87 +1,65 @@
 import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import moment from 'moment';
 
 export default function Chart(props) {
-  const { campaign, data } = props;
-  console.log(data, campaign)
-  // const series = data[campaign].reduce((acc, current) => {
-  //   return acc
-  // }, {
-  //   ADS_FIVE_WATCHED: {
-  //     name: 'ADS_FIVE_WATCHED',
-  //     type: 'spline',
-  //     yAxis: 1,
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     data: []
-  //   },
-  //   ADS_VIDEOAD_WATCHED: {
-  //     name: 'ADS_VIDEOAD_WATCHED',
-  //     type: 'spline',
-  //     yAxis: 2,
-  //     data: [],
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     dashStyle: 'shortdot'
-  //   },
-  //   Add_Friend_Request: {
-  //     name: 'Add_Friend_Request',
-  //     type: 'spline',
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     data: []
-  //   }
-  // });
-
-  // const serie1s = [
-  //   {
-  //     name: 'ADS_FIVE_WATCHED',
-  //     type: 'spline',
-  //     yAxis: 1,
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     data: []
-  //   },
-  //   {
-  //     name: 'ADS_VIDEOAD_WATCHED',
-  //     type: 'spline',
-  //     yAxis: 2,
-  //     data: [],
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     dashStyle: 'shortdot'
-  //   },
-  //   {
-  //     name: 'Add_Friend_Request',
-  //     type: 'spline',
-  //     marker: {
-  //       enabled: true
-  //     },
-  //     data: []
-  //   }
-  // ];
+  const { campaign, data, dateRange: { startDate, endDate } } = props;
+  const dataChart = data[campaign].reduce((acc, current) => {
+    if(!moment(current['Date']).isBetween(startDate, endDate, null, '[]')) {
+      return acc;
+    }
+    
+    const currentObj = current["FormatDate"];
+    acc.categories.push(currentObj);
+    acc.series['ADS_FIVE_WATCHED'].data.push(current["ADS_FIVE_WATCHED"]);
+    acc.series['ADS_VIDEOAD_WATCHED'].data.push(current["ADS_VIDEOAD_WATCHED"]);
+    acc.series['Add_Friend_Request'].data.push(current["Add_Friend_Request"]);
+    return acc
+  }, {
+    categories: [],
+    series: {
+      ADS_FIVE_WATCHED: {
+        name: 'ADS_FIVE_WATCHED',
+        type: 'spline',
+        yAxis: 1,
+        marker: {
+          enabled: true
+        },
+        data: []
+      },
+      ADS_VIDEOAD_WATCHED: {
+        name: 'ADS_VIDEOAD_WATCHED',
+        type: 'spline',
+        yAxis: 2,
+        data: [],
+        marker: {
+          enabled: true
+        },
+        dashStyle: 'shortdot'
+      },
+      Add_Friend_Request: {
+        name: 'Add_Friend_Request',
+        type: 'spline',
+        marker: {
+          enabled: true
+        },
+        data: []
+      }
+    },
+  });
 
   const options = {
     chart: {
       zoomType: 'xy'
     },
     title: {
-      text: 'Average Monthly Weather Data for Tokyo',
-      align: 'left'
-    },
-    subtitle: {
-      text: 'Source: WorldClimate.com',
-      align: 'left'
+      text: campaign,
+      align: 'center'
     },
     xAxis: [
       {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        categories: dataChart.categories,
         crosshair: true
       }
     ],
@@ -89,13 +67,12 @@ export default function Chart(props) {
       {
         // Primary yAxis
         labels: {
-          format: '{value}°C',
           style: {
             color: Highcharts.getOptions().colors[2]
           }
         },
         title: {
-          text: 'Temperature',
+          text: 'Add Friend Request',
           style: {
             color: Highcharts.getOptions().colors[2]
           }
@@ -106,13 +83,12 @@ export default function Chart(props) {
         // Secondary yAxis
         gridLineWidth: 0,
         title: {
-          text: 'Rainfall',
+          text: 'ADS FIVE WATCHED',
           style: {
             color: Highcharts.getOptions().colors[0]
           }
         },
         labels: {
-          format: '{value} mm',
           style: {
             color: Highcharts.getOptions().colors[0]
           }
@@ -122,13 +98,12 @@ export default function Chart(props) {
         // Tertiary yAxis
         gridLineWidth: 0,
         title: {
-          text: 'Sea-Level Pressure',
+          text: 'ADS VIDEOAD WATCHED',
           style: {
             color: Highcharts.getOptions().colors[1]
           }
         },
         labels: {
-          format: '{value} mb',
           style: {
             color: Highcharts.getOptions().colors[1]
           }
@@ -148,7 +123,7 @@ export default function Chart(props) {
       floating: true,
       backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'rgba(255,255,255,0.25)' // theme
     },
-    series: [],
+    series: Object.values(dataChart.series),
     responsive: {
       rules: [
         {

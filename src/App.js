@@ -4,13 +4,25 @@ import data from './data.json';
 import Root from './components/Root';
 
 function App() {
+  let minDate = null;
+  let maxDate = null;
   const formatData = data.reduce((acc, current) => {
     if (typeof current['Campaign'] === 'object') {
       return acc;
     }
     let date = new Date(Date.parse(current['Date']));
+    if(minDate === null && maxDate === null) {
+      minDate = date;
+      maxDate = date;
+    }
+    if(date > maxDate) {
+      maxDate = date;
+    }
+    if(date < minDate) {
+      minDate = date;
+    }
     date = new Intl.DateTimeFormat().format(date);
-    acc.push({ ...current, ForamtDate: date, DateMs: +new Date(current['Date']) });
+    acc.push({ ...current, FormatDate: date, DateMs: +new Date(current['Date']) });
     return acc;
   }, []);
 
@@ -19,19 +31,18 @@ function App() {
       return acc;
     }
 
-    if (!Array.isArray(acc[current['Campaign']])) {
-      acc[current['Campaign']] = [];
+    if (!Array.isArray(acc[current['Campaign'] + current['Channel']])) {
+      acc[current['Campaign'] + current['Channel']] = [];
     }
 
-    acc[current['Campaign']].push(current);
+    acc[current['Campaign'] + current['Channel']].push(current);
 
     return acc;
   }, {});
 
-  console.log('normData', formatData, normData);
   return (
     <div className="App">
-      <Root normData={normData} formatData={formatData} />
+      <Root normData={normData} minDate={minDate} maxDate={maxDate} formatData={formatData} />
     </div>
   );
 }
