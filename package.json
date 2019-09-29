@@ -2,6 +2,7 @@
   "name": "chart-test",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lancelap.github.io/test-hc",
   "dependencies": {
     "antd": "^3.23.4",
     "bootstrap-daterangepicker": "^3.0.5",
@@ -23,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b master -d build"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
