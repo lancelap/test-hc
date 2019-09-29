@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import data from './data.json';
 import Root from './components/Root';
+import moment from 'moment';
 
 function App() {
   let minDate = null;
@@ -21,8 +22,7 @@ function App() {
     if(date < minDate) {
       minDate = date;
     }
-    date = new Intl.DateTimeFormat().format(date);
-    acc.push({ ...current, FormatDate: date, DateMs: +new Date(current['Date']) });
+    acc.push({ ...current, FormatDate: moment(date).format('DD.MM.YYYY'), DateMs: +new Date(current['Date']) });
     return acc;
   }, []);
 
